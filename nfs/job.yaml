@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-web-content
+spec:
+  template:
+    spec:
+      containers:
+      - name: writer
+        image: busybox
+        command: ["/bin/sh", "-c"]
+        args:
+          - echo "<h3>\"Swieze powietrze\"</h3><p>Wszystko dobre, gdy koncem blogoslawione. Wszystko marne, gdy koniec gorzkim sie staje.</p>" > /mnt/index.html
+        volumeMounts:
+        - name: nfs-volume
+          mountPath: /mnt
+      restartPolicy: Never
+      volumes:
+      - name: nfs-volume
+        persistentVolumeClaim:
+          claimName: nfs-pvc
+
